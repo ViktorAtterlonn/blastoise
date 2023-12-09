@@ -11,6 +11,7 @@ type Ctx struct {
 	Duration   int
 	Method     string
 	Body       string
+	Headers    map[string]string
 	ResultChan chan []*RequestResult
 	AbortChan  chan bool
 }

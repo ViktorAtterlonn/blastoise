@@ -3,7 +3,6 @@ package runner
 import (
 	"blastoise/internal/structs"
 	"blastoise/internal/utils"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -39,11 +38,17 @@ func (h *HttpRequestRunner) Run() {
 		}
 
 		pool.Add(func() error {
-
 			totalRequests++
-			result := request(h.ctx.Url, h.ctx.Method)
 
-			results = append(results, &result)
+			switch h.ctx.Method {
+			case "GET":
+				result := request(h.ctx.Url, h.ctx.Method, "", h.ctx.Headers)
+				results = append(results, &result)
+
+			case "POST":
+				result := request(h.ctx.Url, h.ctx.Method, h.ctx.Body, h.ctx.Headers)
+				results = append(results, &result)
+			}
 
 			return nil
 		})
@@ -56,31 +61,30 @@ func (h *HttpRequestRunner) Run() {
 	h.ctx.ResultChan <- results
 }
 
-func request(url string, method string) structs.RequestResult {
+func request(url string, method string, body string, headers map[string]string) structs.RequestResult {
 
 	start := time.Now()
 
 	req, err := http.NewRequest(method, url, nil)
+
 	if err != nil {
-
-		fmt.Println(err)
-
 		return structs.RequestResult{
 			StatusCode: 500,
 			Duration:   int(time.Since(start).Milliseconds()),
 		}
+	}
 
+	for k, v := range headers {
+		req.Header.Add(k, v)
 	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-
 		return structs.RequestResult{
 			StatusCode: 500,
 			Duration:   int(time.Since(start).Milliseconds()),
 		}
-
 	}
 
 	result := structs.RequestResult{

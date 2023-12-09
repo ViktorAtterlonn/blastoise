@@ -4,6 +4,7 @@ import (
 	"blastoise/internal/runner"
 	"blastoise/internal/structs"
 	"blastoise/internal/view"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -17,6 +18,7 @@ func NewCommand() *Command {
 	var duration int
 	var method string
 	var body string
+	var headers map[string]string
 
 	var command = &cobra.Command{
 		Use:   "blastoise",
@@ -27,12 +29,15 @@ func NewCommand() *Command {
 			abortchn := make(chan bool)
 			resultchn := make(chan []*structs.RequestResult)
 
+			fmt.Printf("Headers: %v\n", headers)
+
 			ctx := structs.Ctx{
 				Url:        args[0],
 				Rps:        rps,
 				Duration:   duration,
 				Method:     method,
 				Body:       body,
+				Headers:    headers,
 				ResultChan: resultchn,
 				AbortChan:  abortchn,
 			}
@@ -49,6 +54,7 @@ func NewCommand() *Command {
 	command.PersistentFlags().IntVarP(&duration, "duration", "d", 10, "Set the duration in seconds")
 	command.PersistentFlags().StringVarP(&method, "method", "m", "GET", "Set the HTTP method")
 	command.PersistentFlags().StringVarP(&body, "body", "b", "", "Set the HTTP body")
+	command.PersistentFlags().StringToStringVarP(&headers, "headers", "H", nil, "Set the HTTP headers")
 
 	return &Command{
 		command: command,
