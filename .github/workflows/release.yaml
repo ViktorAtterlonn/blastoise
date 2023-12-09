@@ -3,9 +3,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - main # Adjust this to the branch you want to trigger the workflow on
-    paths:
-      - 'internal/*' # Adjust this to the path of your code
+      - main
 
 jobs:
   build:
