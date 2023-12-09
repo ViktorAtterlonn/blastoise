@@ -7,7 +7,7 @@ A straightforward HTTP/1.1 benchmarking tool developed in Go, inspired by autoca
 ## Install
 
 ```
-go install github.com/viktoratterlonn/blastoise
+curl -fsSL https://raw.githubusercontent.com/ViktorAtterlonn/blastoise/main/install.sh | sh -
 ```
 
 ## Usage
