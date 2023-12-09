@@ -3,7 +3,9 @@ name: Build and Release
 on:
   push:
     branches:
-      - main
+      - main # Adjust this to the branch you want to trigger the workflow on
+    paths:
+      - 'internal/*' # Adjust this to the path of your code
 
 jobs:
   build:
@@ -16,21 +18,22 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.21  # You can change this to your preferred Go version
+          go-version: 1.21 # Specify the version of Go you want to use
 
-      - name: Build Go App
-        run: make build
+      - name: Build Go app
+        run: go build -o myapp
 
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
         with:
-          files: blastoise
+          files: |
+            main
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
 
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -39,3 +42,4 @@ jobs:
           asset_path: ./main
           asset_name: blastoise
           asset_content_type: application/octet-stream
+
