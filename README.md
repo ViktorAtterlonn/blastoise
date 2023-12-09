@@ -2,17 +2,25 @@
 
 ![Screenshot](banner.png)
 
-Simple HTTP/1.1 benchmarking tool for loadtesting your API:s
+A straightforward HTTP/1.1 benchmarking tool developed in Go, inspired by autocannon. I created this tool to experiment with Go as a programming language and to explore the charm cli and tui tools.
 
+## Install
+
+```
+go install github.com/viktoratterlonn/blastoise
+```
+
+## Usage
 
 ```bash
 Usage:
-blastoise [flags] url
+  blastoise [flags]
 
 Flags:
-  -b, --body string     Set the HTTP body
-  -d, --duration int    Set the duration in seconds (default 10)
-  -h, --help            help for blastoise
-  -m, --method string   Set the HTTP method (default "GET")
-  -r, --rps int         Set the number of requests per second (default 1)
+  -b, --body string              Set the HTTP body
+  -d, --duration int             Set the duration in seconds (default 10)
+  -H, --headers stringToString   Set the HTTP headers (default [])
+  -h, --help                     help for blastoise
+  -m, --method string            Set the HTTP method (default "GET")
+  -r, --rps int                  Set the number of requests per second (default 1)
 ```
