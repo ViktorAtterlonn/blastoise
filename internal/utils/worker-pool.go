@@ -1,24 +1,25 @@
-package worker
+package utils
 
 import (
+	"fmt"
 	"sync"
 )
 
-type PromisePool struct {
+type WorkerPool struct {
 	concurrency int
 	items       []chan struct{}
 	mutex       sync.Mutex
 	wg          sync.WaitGroup
 }
 
-func NewPromisePool(concurrency int) *PromisePool {
-	return &PromisePool{
+func NewWorkerPool(concurrency int) *WorkerPool {
+	return &WorkerPool{
 		concurrency: concurrency,
 		items:       make([]chan struct{}, 0),
 	}
 }
 
-func (p *PromisePool) Add(asyncTaskFn func() error) {
+func (p *WorkerPool) Add(asyncTaskFn func() error) {
 	ch := make(chan struct{})
 	p.mutex.Lock()
 	if len(p.items) >= p.concurrency {
@@ -37,7 +38,7 @@ func (p *PromisePool) Add(asyncTaskFn func() error) {
 			close(ch)
 		}()
 		if err := asyncTaskFn(); err != nil {
-			// Handle the error as needed
+			fmt.Println(err)
 		}
 		p.mutex.Lock()
 		for i, c := range p.items {
@@ -51,15 +52,15 @@ func (p *PromisePool) Add(asyncTaskFn func() error) {
 	}()
 }
 
-func (p *PromisePool) Size() int {
+func (p *WorkerPool) Size() int {
 	return len(p.items)
 }
 
-func (p *PromisePool) Wait() {
+func (p *WorkerPool) Wait() {
 	p.wg.Wait()
 }
 
-func (p *PromisePool) Abort() {
+func (p *WorkerPool) Abort() {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 	for _, ch := range p.items {

@@ -1,27 +1,18 @@
 package commands
 
 import (
-	"blastoise/internal/services"
+	"blastoise/internal/runner"
+	"blastoise/internal/structs"
+	"blastoise/internal/view"
 
 	"github.com/spf13/cobra"
 )
 
 type Command struct {
 	command *cobra.Command
-	service *services.Service
 }
 
-type Ctx struct {
-	url          string
-	rps          int
-	duration     int
-	method       string
-	body         string
-	service      *services.Service
-	requestsChan chan []*services.RequestResult
-}
-
-func NewCommand(s *services.Service, channel chan []*services.RequestResult) *Command {
+func NewCommand() *Command {
 	var rps int
 	var duration int
 	var method string
@@ -33,19 +24,24 @@ func NewCommand(s *services.Service, channel chan []*services.RequestResult) *Co
 		Short: "Blastoise is a CLI tool for initiating processes",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			ctx := Ctx{
-				url:          args[0],
-				rps:          rps,
-				duration:     duration,
-				method:       method,
-				body:         body,
-				service:      s,
-				requestsChan: channel,
+			abortchn := make(chan bool)
+			resultchn := make(chan []*structs.RequestResult)
+
+			ctx := structs.Ctx{
+				Url:        args[0],
+				Rps:        rps,
+				Duration:   duration,
+				Method:     method,
+				Body:       body,
+				ResultChan: resultchn,
+				AbortChan:  abortchn,
 			}
 
-			model := NewModel(ctx)
+			view := view.NewView(&ctx)
+			runner := runner.NewHttpRequestRunner(&ctx)
 
-			model.Start()
+			go runner.Run()
+			view.Start()
 		},
 	}
 
@@ -56,7 +52,6 @@ func NewCommand(s *services.Service, channel chan []*services.RequestResult) *Co
 
 	return &Command{
 		command: command,
-		service: s,
 	}
 }
 
