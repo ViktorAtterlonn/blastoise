@@ -19,7 +19,7 @@ jobs:
           go-version: 1.21 # Specify the version of Go you want to use
 
       - name: Build Go app
-        run: go build -o myapp
+        run: make build
 
       - name: Create Release
         id: create_release
