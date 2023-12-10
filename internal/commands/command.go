@@ -4,7 +4,6 @@ import (
 	"blastoise/internal/runner"
 	"blastoise/internal/structs"
 	"blastoise/internal/view"
-	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -28,8 +27,6 @@ func NewCommand() *Command {
 
 			abortchn := make(chan bool)
 			resultchn := make(chan []*structs.RequestResult)
-
-			fmt.Printf("Headers: %v\n", headers)
 
 			ctx := structs.Ctx{
 				Url:        args[0],
