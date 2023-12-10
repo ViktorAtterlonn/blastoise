@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main-macos-amd64 # Only supports macOS for now
+          asset_path: ./main-macos-arm64 # Only supports macOS for now
           asset_name: blastoise
           asset_content_type: application/octet-stream
 
