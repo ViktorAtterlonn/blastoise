@@ -5,7 +5,15 @@ all: build
 
 build:
 	@echo "Building..."
-	@go build -o main cmd/blastoise/main.go
+	@make arm64
+
+arm64:
+	@echo "Building for macos-arm64..."
+	@GOOS=darwin GOARCH=arm64 go build -o main-macos-arm64 cmd/blastoise/main.go
+
+linux:
+	@echo "Building for linux..."
+	@GOOS=linux GOARCH=amd64 go build -o main-linux cmd/blastoise/main.go
 
 # Run the application
 run:
