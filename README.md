@@ -1,6 +1,6 @@
 # Blastoise
 
-![Screenshot](banner.png)
+![Screenshot](assets/banner.png)
 
 A straightforward HTTP/1.1 benchmarking tool developed in Go, inspired by autocannon. I created this tool to experiment with Go as a programming language and to explore the charm cli and tui tools.
 
@@ -14,7 +14,7 @@ curl -fsSL https://raw.githubusercontent.com/ViktorAtterlonn/blastoise/main/inst
 
 ```bash
 Usage:
-  blastoise [flags]
+  blastoise [flags] url
 
 Flags:
   -b, --body string              Set the HTTP body
@@ -24,3 +24,7 @@ Flags:
   -m, --method string            Set the HTTP method (default "GET")
   -r, --rps int                  Set the number of requests per second (default 1)
 ```
+
+## Demo
+
+![demo](assets/demo.gif)
