@@ -48,17 +48,17 @@ func (v View) Start() {
 
 	pad := strings.Repeat(" ", Padding)
 
-	fmt.Println("\n" +
-		pad + v.renderHttpMethod() + " " + TextOpacity(v.ctx.Url+fmt.Sprintf(" (%d requests/second)", v.ctx.Rps)) + "\n\n" +
+	fmt.Println("\n\n" +
+		pad + v.renderHttpMethod() + " " + Text(v.ctx.Url) + TextOpacity(fmt.Sprintf(" (%d requests/second)", v.ctx.Rps)) + "\n\n" +
 		v.renderResults(results) + "\n\n")
 }
 
 func (v View) View() string {
 	pad := strings.Repeat(" ", Padding)
 
-	return "\n" +
-		pad + v.renderHttpMethod() + " " + TextOpacity(v.ctx.Url) + "\n\n" +
-		pad + TextOpacity(fmt.Sprintf("Sending %s rps for %d seconds", TextPrimary(fmt.Sprintf("%d", v.ctx.Rps)), v.ctx.Duration)) + "\n\n" +
+	return "\n\n" +
+		pad + v.renderHttpMethod() + " " + Text(v.ctx.Url) + "\n\n" +
+		pad + TextOpacity(fmt.Sprintf("Sending %d requests/second for %d seconds", v.ctx.Rps, v.ctx.Duration)) + "\n\n" +
 		pad + v.progress.View() + "\n\n" +
 		pad + TextOpacity("Press ctrl + c to quit")
 }

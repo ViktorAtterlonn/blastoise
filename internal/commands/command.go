@@ -22,7 +22,7 @@ func NewCommand() *Command {
 	var command = &cobra.Command{
 		Use:   "blastoise",
 		Args:  cobra.ExactArgs(1),
-		Short: "Blastoise is a CLI tool for initiating processes",
+		Short: "Blastoise is a CLI tool for load testing HTTP servers",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			abortchn := make(chan bool)

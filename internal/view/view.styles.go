@@ -8,6 +8,7 @@ const (
 )
 
 // Text
+var Text = lipgloss.NewStyle().Foreground(lipgloss.Color("#ffffff")).Render
 var TextOpacity = lipgloss.NewStyle().Foreground(lipgloss.Color("#626262")).Render
 var TextPrimary = lipgloss.NewStyle().Foreground(lipgloss.Color("#9286D9")).Render
 
